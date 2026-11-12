@@ -28,8 +28,8 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen pt-36 pb-20 overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Background Ambient Aurora Glows */}
-      <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[800px] h-[550px] aurora-glow-purple blur-3xl pointer-events-none rounded-full transform-gpu will-change-transform" />
-      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] aurora-glow-blue blur-3xl pointer-events-none rounded-full transform-gpu will-change-transform" />
+      <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[800px] h-[550px] aurora-glow-purple blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] aurora-glow-blue blur-3xl pointer-events-none rounded-full" />
       <div className="absolute inset-0 grid-pattern-dual opacity-35 pointer-events-none" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10 h-full flex flex-col justify-center">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useSyncExternalStore } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,15 +10,13 @@ interface ThemeToggleProps {
   showLabel?: boolean;
 }
 
-const emptySubscribe = () => () => {};
-
 export default function ThemeToggle({ className = "", showLabel = false }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
-  const mounted = useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (
@@ -59,7 +57,7 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
               key="moon"
               initial={{ rotate: 90, scale: 0.5, opacity: 0 }}
               animate={{ rotate: 0, scale: 1, opacity: 1 }}
-              exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
+              exit={{ rotate: -90, scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="flex items-center justify-center"
             >

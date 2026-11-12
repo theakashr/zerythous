@@ -11,7 +11,7 @@ export default function Contact() {
   return (
     <section id="contact" className="py-32 md:py-48 bg-background text-foreground border-t border-black/[0.06] dark:border-white/[0.06] relative overflow-hidden transition-colors duration-300">
       {/* Background Aurora Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full aurora-glow-purple blur-3xl pointer-events-none opacity-25 transform-gpu will-change-transform" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full aurora-glow-purple blur-3xl pointer-events-none opacity-25" />
       <div className="absolute inset-0 grid-pattern-dual pointer-events-none opacity-20" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useSyncExternalStore, useCallback } from "react";
 
 type Theme = "light" | "dark";
 
@@ -12,42 +12,59 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
+const listeners = new Set<() => void>();
 
-  useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem("zerythous-theme") as Theme | null;
-      if (savedTheme === "dark" || savedTheme === "light") {
-        setThemeState(savedTheme);
-        document.documentElement.classList.toggle("dark", savedTheme === "dark");
-      } else {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const initial = prefersDark ? "dark" : "light";
-        setThemeState(initial);
-        document.documentElement.classList.toggle("dark", initial === "dark");
-      }
-    } catch {
-      // fallback
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === "zerythous-theme") {
+      callback();
     }
-    setMounted(true);
-  }, []);
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener("storage", onStorage);
+  };
+}
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+function notify() {
+  listeners.forEach((listener) => listener());
+}
+
+function getClientSnapshot(): Theme {
+  try {
+    const saved = localStorage.getItem("zerythous-theme") as Theme | null;
+    if (saved === "dark" || saved === "light") {
+      return saved;
+    }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  } catch {
+    return "light";
+  }
+}
+
+function getServerSnapshot(): Theme {
+  return "light";
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+
+  const setTheme = useCallback((newTheme: Theme) => {
     try {
       localStorage.setItem("zerythous-theme", newTheme);
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     } catch {
       // fallback
     }
-  };
+    notify();
+  }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const nextTheme = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
-  };
+  }, [theme, setTheme]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>

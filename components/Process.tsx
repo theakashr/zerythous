@@ -19,7 +19,7 @@ export default function Process() {
   return (
     <section id="process" className="py-28 md:py-44 bg-background text-foreground border-t border-black/[0.06] dark:border-white/[0.06] relative overflow-hidden transition-colors duration-300">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full aurora-glow-purple blur-3xl pointer-events-none opacity-30" />
+      <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full aurora-glow-purple blur-3xl pointer-events-none opacity-30 transform-gpu will-change-transform" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="mb-20 md:mb-28">
